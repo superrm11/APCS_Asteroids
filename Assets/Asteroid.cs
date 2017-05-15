@@ -8,10 +8,12 @@ public class Asteroid : MonoBehaviour {
 
 	public float bounderyOffset = 1.5f;
 
+	public CircleCollider2D hitbox;
+
 	// Use this for initialization
 	void Start () {
 		transform.rotation = Quaternion.Euler (new Vector3 (0, 0, Random.Range (0, 360)));
-
+		hitbox = gameObject.GetComponent<CircleCollider2D> ();
 	}
 
 	// Update is called once per frame

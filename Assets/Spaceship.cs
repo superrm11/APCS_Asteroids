@@ -11,6 +11,7 @@ public class Spaceship : MonoBehaviour {
 	{
 		print (name + "_hb");
 		hitbox = gameObject.GetComponent<BoxCollider2D> ();
+
 	}
 
 	/**
@@ -77,15 +78,10 @@ public class Spaceship : MonoBehaviour {
 		transform.Translate(Vector2.up * Time.deltaTime * moveSpeed);
 	}
 
-	public void checkHitbox()
+
+	void OnTriggerEnter2D(Collider2D c)
 	{
-		GameObject[] asteroids = GameObject.FindGameObjectsWithTag ("Asteroid");
-		for (int i = 0; i < asteroids.Length; i++) {
-			if (asteroids [i].GetComponent<BoxCollider2D> ().IsTouching (hitbox)) {
-				Destroy (gameObject);
-				break;
-			}
-		}
+		print ("hello");
 	}
 
 
