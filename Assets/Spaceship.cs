@@ -81,7 +81,8 @@ public class Spaceship : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D c)
 	{
-		print ("hello");
+		if (c.gameObject.tag.Equals ("Asteroid"))
+			Destroy (gameObject);
 	}
 
 

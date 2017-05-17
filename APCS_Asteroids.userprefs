@@ -1,13 +1,16 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Spaceship.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Asteroid.cs">
     <Files>
-      <File FileName="Assets\Spaceship.cs" Line="84" Column="19" />
-      <File FileName="Assets\Asteroid.cs" Line="16" Column="57" />
+      <File FileName="Assets\Spaceship.cs" Line="85" Column="25" />
+      <File FileName="Assets\Asteroid.cs" Line="23" Column="18" />
+      <File FileName="Assets\Missile.cs" Line="54" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="C:\Users\Ryan McGee\Documents\APCS_Asteroids\Assets\Asteroid.cs" line="12" column="2" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

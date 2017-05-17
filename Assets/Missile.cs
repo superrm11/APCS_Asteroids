@@ -19,12 +19,14 @@ public class Missile : MonoBehaviour {
 		if (hasCreatedOriginal) {
 			gameObject.GetComponent<SpriteRenderer> ().enabled = true;
 			transform.SetParent (null);
+			gameObject.GetComponent<Collider2D> ().enabled = true;
 
 			transform.rotation = GameObject.Find ("Spaceship").transform.rotation;
 		} else {
 			hasCreatedOriginal = true;
 			isOriginal = true;
 			gameObject.GetComponent<SpriteRenderer> ().enabled = false;
+			gameObject.GetComponent<Collider2D> ().enabled = false;
 		}
 	}
 	
@@ -43,5 +45,10 @@ public class Missile : MonoBehaviour {
 			timeAlive += Time.deltaTime;
 	}
 
-
+	void OnTriggerEnter2D(Collider2D c)
+	{
+		if (c.gameObject.tag.Equals ("Asteroid")) {
+			Destroy (gameObject);
+		}
+	}
 }
