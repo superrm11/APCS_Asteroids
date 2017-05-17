@@ -4,10 +4,55 @@ using UnityEngine;
 
 public class World : MonoBehaviour {
 
+	public int level = 1;
+	public int lives = 3;
+
+	private Canvas levelScreen;
+
 	public const float lowerBound = -5.1f;
 	public const float upperBound = 6.1f;
 	public const float leftBound = -10.4f;
 	public const float rightBound = 10.4f;
+
+	void Start()
+	{
+		levelScreen = GetComponent<Canvas> ();
+	}
+
+	void Update()
+	{
+		displayLevelScreen (GameObject.FindGameObjectsWithTag ("Asteroid").Length < 1 || isShowingLevelScreen);
+	}
+
+	private bool isShowingLevelScreen = false;
+
+	private void displayLevelScreen(bool enabled)
+	{
+		if (!enabled)
+			return;
+		isShowingLevelScreen = true;
+		GameObject[] asteroids = GameObject.FindGameObjectsWithTag ("Asteroid");
+		GameObject ship = GameObject.FindGameObjectWithTag ("Player");
+
+		ship.GetComponent<SpriteRenderer> ().enabled = false;
+		foreach(GameObject g in asteroids)
+		{
+			g.GetComponent<SpriteRenderer> ().enabled = false;
+		}
+
+		float start = Time.time;
+
+		if (Time.time - start < 1)
+			return;
+		
+		Component[] c = levelScreen.GetComponents<Component> ();
+		foreach (Component co in c)
+			print (c.GetType ());
+		levelScreen.enabled = true;
+
+
+		isShowingLevelScreen = false;
+	}
 
 	/**
 	 * Checks to see if the ship is outside the bounderies of the screen.

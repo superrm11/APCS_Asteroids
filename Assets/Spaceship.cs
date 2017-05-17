@@ -9,7 +9,6 @@ public class Spaceship : MonoBehaviour {
 
 	void Start()
 	{
-		print (name + "_hb");
 		hitbox = gameObject.GetComponent<BoxCollider2D> ();
 
 	}
