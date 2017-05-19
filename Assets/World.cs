@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class World : MonoBehaviour {
 
@@ -16,7 +17,8 @@ public class World : MonoBehaviour {
 
 	void Start()
 	{
-		levelScreen = GetComponent<Canvas> ();
+		levelScreen = GameObject.Find ("Canvas").GetComponent<Canvas> ();
+		print (levelScreen);
 	}
 
 	void Update()
@@ -24,12 +26,22 @@ public class World : MonoBehaviour {
 		displayLevelScreen (GameObject.FindGameObjectsWithTag ("Asteroid").Length < 1 || isShowingLevelScreen);
 	}
 
-	private bool isShowingLevelScreen = false;
+	public static bool isShowingLevelScreen = false;
+
+	private float timePassed1 = 0f,timePassed2 = 0f,timePassed3 = 0f;
+	private bool finishedWait1 = false, finishedWait2 = false;
+	private bool displayLevelScreenFirstRun = true;
 
 	private void displayLevelScreen(bool enabled)
 	{
 		if (!enabled)
 			return;
+
+		if (displayLevelScreenFirstRun) {
+			displayLevelScreenFirstRun = false;
+			GameObject.Find ("LevelDisplay").GetComponent<Text> ().text = "Level " + ++level;
+		}
+
 		isShowingLevelScreen = true;
 		GameObject[] asteroids = GameObject.FindGameObjectsWithTag ("Asteroid");
 		GameObject ship = GameObject.FindGameObjectWithTag ("Player");
@@ -40,17 +52,43 @@ public class World : MonoBehaviour {
 			g.GetComponent<SpriteRenderer> ().enabled = false;
 		}
 
-		float start = Time.time;
-
-		if (Time.time - start < 1)
+		timePassed1 += Time.deltaTime;
+		if (timePassed1 < 1 && !finishedWait1) {
 			return;
-		
-		Component[] c = levelScreen.GetComponents<Component> ();
-		foreach (Component co in c)
-			print (c.GetType ());
+		}
+
+		finishedWait1 = true;
 		levelScreen.enabled = true;
 
+		timePassed2 += Time.deltaTime;
+		if (timePassed2 < 2 && !finishedWait2) {
+			return;
+		}
+		finishedWait2 = true;
 
+		levelScreen.enabled = false;
+
+		timePassed3 += Time.deltaTime;
+		if (timePassed3 < 1)
+			return;
+
+		for (int i = 0; i < level; i++)
+			Instantiate (Resources.Load ("lg_Asteroid"),
+				new Vector2 ((Random.Range (0f, 1f) > .5) ? Random.Range (-4, leftBound) : 
+					Random.Range (4, rightBound), (Random.Range (0f, 1f) > .5) ?
+					Random.Range (3f, upperBound) : Random.Range (lowerBound, -3f)), new Quaternion());
+
+		timePassed1 = 0f;
+		timePassed2 = 0f;
+		timePassed3 = 0f;
+		finishedWait1 = false;
+		finishedWait2 = false;
+
+		GameObject.Find("Spaceship").transform.SetPositionAndRotation(new Vector2(), new Quaternion());
+
+		GameObject.Find ("Spaceship").GetComponent<SpriteRenderer> ().enabled = true;
+
+		displayLevelScreenFirstRun = true;
 		isShowingLevelScreen = false;
 	}
 

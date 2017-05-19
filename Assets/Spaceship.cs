@@ -18,16 +18,17 @@ public class Spaceship : MonoBehaviour {
 	 */
 	void Update ()
 	{
+		if (!World.isShowingLevelScreen)
+		{
+			move ();
 
-		move ();
+			World.checkBounderies (this.gameObject, 0f);
 
-		World.checkBounderies (this.gameObject, 0f);
-
-		fire (Input.GetKey (KeyCode.Space));
-
+			fire (Input.GetKey (KeyCode.Space));
+		}
 	}
 
-	public const float missileFireRate = .7f;
+	public const float missileFireRate = .3f;
 
 	public float currentTime = 0.0f;
 
@@ -40,7 +41,7 @@ public class Spaceship : MonoBehaviour {
 		if (currentTime > 0) {
 			currentTime -= Time.deltaTime;
 		}else if (Input.GetKey (KeyCode.Space)) {
-			Instantiate (GameObject.Find ("missile"));
+			Instantiate (Resources.Load("Missile"));
 			currentTime = missileFireRate;
 		}
 	}
