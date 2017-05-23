@@ -18,14 +18,17 @@ public class Spaceship : MonoBehaviour {
 	 */
 	void Update ()
 	{
-		if (!World.isShowingLevelScreen)
-		{
+		if (World.menuStatus == World.menuType.GAME) {
+			if (GetComponent<SpriteRenderer> ().enabled == false)
+				GetComponent<SpriteRenderer> ().enabled = true;
+
 			move ();
 
 			World.checkBounderies (this.gameObject, 0f);
 
 			fire (Input.GetKey (KeyCode.Space));
-		}
+		} else
+			GetComponent<SpriteRenderer> ().enabled = false;
 	}
 
 	public const float missileFireRate = .3f;

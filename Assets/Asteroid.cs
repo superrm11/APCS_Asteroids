@@ -8,7 +8,7 @@ public class Asteroid : MonoBehaviour {
 	public int health = 4;
 	public float speed = .75f;
 
-	public float bounderyOffset = 1.5f;
+	public float bounderyOffset = 0f;
 
 	// Use this for initialization
 	void Start () {
