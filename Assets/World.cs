@@ -18,6 +18,7 @@ public class World : MonoBehaviour {
 	void Start()
 	{
 		levelScreen = GameObject.Find ("Canvas").GetComponent<Canvas> ();
+		levelScreen.enabled = false;
 		print (levelScreen);
 	}
 
