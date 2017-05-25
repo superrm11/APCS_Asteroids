@@ -7,15 +7,15 @@ public class World : MonoBehaviour {
 
 	public enum menuType
 	{
-		MENU, LEVEL_SCREEN, GAME
+		MENU, LEVELUP_SCREEN,LIFEDOWN_SCREEN, GAME, GAME_OVER
 	}
 
 	public static menuType menuStatus = menuType.MENU;
 
-	private int level = 0;
-	private int lives = 3;
+	private static int level = 0;
+	private static int lives = 3;
 
-	private Canvas levelScreen;
+	private static Canvas levelScreen;
 
 	public const float lowerBound = -5.1f;
 	public const float upperBound = 5.1f;
@@ -37,49 +37,66 @@ public class World : MonoBehaviour {
 			GameObject.Find ("MenuName").GetComponent<Text> ().enabled = true;
 			GameObject.Find ("PressSpace").GetComponent<Text> ().enabled = true;
 			if (Input.GetKey (KeyCode.Space)) {
-				menuStatus = menuType.LEVEL_SCREEN;
+				menuStatus = menuType.LEVELUP_SCREEN;
 			}
 
-		} else if (menuStatus == menuType.LEVEL_SCREEN) {
-			if (GameObject.Find ("MenuName").GetComponent<Text> ().enabled == true || 
-				GameObject.Find ("PressSpace").GetComponent<Text> ().enabled == true) {
+		} else if (menuStatus == menuType.LEVELUP_SCREEN) {
+			if (GameObject.Find ("MenuName").GetComponent<Text> ().enabled == true ||
+			    GameObject.Find ("PressSpace").GetComponent<Text> ().enabled == true) {
 				GameObject.Find ("PressSpace").GetComponent<Text> ().enabled = false;
 				GameObject.Find ("MenuName").GetComponent<Text> ().enabled = false;
-			}
+			} 
+			displayLevelScreen (levelScreenType.LEVELUP);
+		} else if (menuStatus == menuType.LIFEDOWN_SCREEN) {
+			displayLevelScreen (levelScreenType.LIFEDOWN);
+
 		} else if (menuStatus == menuType.GAME) {
-			if (GameObject.FindGameObjectsWithTag ("Asteroid").Length == 0) {
-				menuStatus = menuType.LEVEL_SCREEN;
+			if (lives < 1) {
+				menuStatus = menuType.GAME_OVER;
+			} else if (GameObject.FindGameObjectsWithTag ("Asteroid").Length == 0) {
+				menuStatus = menuType.LEVELUP_SCREEN;
 				displayLevelScreen (levelScreenType.LEVELUP);
-			} else if (GameObject.Find ("Spaceship") == null) {
-				menuStatus = menuType.LEVEL_SCREEN;
-				displayLevelScreen (levelScreenType.LIFEDOWN);
+			} else if (GameObject.FindGameObjectWithTag ("Player") == null) {
+				menuStatus = menuType.LIFEDOWN_SCREEN;
 			}
 			
+		} else if (menuStatus == menuType.GAME_OVER) {
+			enableGameOverScreen (true);
+			if (Input.GetKey (KeyCode.R)) {
+				enableGameOverScreen (false);
+				lives = 3;
+				level = 0;
+				menuStatus = menuType.LEVELUP_SCREEN;
+			}
 		}
 
 	}
 
-	private float timePassed1 = 0f,timePassed2 = 0f,timePassed3 = 0f;
-	private bool finishedWait1 = false, finishedWait2 = false;
-	private bool displayLevelScreenFirstRun = true;
+	private static float timePassed1 = 0f,timePassed2 = 0f,timePassed3 = 0f;
+	private static bool finishedWait1 = false, finishedWait2 = false;
+	private static bool displayLevelScreenFirstRun = true;
 
 	public enum levelScreenType
 	{
 		LEVELUP, LIFEDOWN
 	}
 
-	private void displayLevelScreen(levelScreenType type)
+	private static void displayLevelScreen(levelScreenType type)
 	{
 
 		if (displayLevelScreenFirstRun) {
 			displayLevelScreenFirstRun = false;
-			if (type == levelScreenType.LEVELUP)
+			if (type == levelScreenType.LEVELUP) {
 				GameObject.Find ("LevelDisplay").GetComponent<Text> ().text = "Level " + ++level;
-			else if (type == levelScreenType.LIFEDOWN)
 				GameObject.Find ("LifeCounter").GetComponent<Text> ().text = "Lives   x" + lives;
+			} else if (type == levelScreenType.LIFEDOWN) {
+				GameObject.Find ("LifeCounter").GetComponent<Text> ().text = "Lives   x" + --lives;
+				GameObject.Find ("LevelDisplay").GetComponent<Text> ().text = "Level " + level;
+			}
 		}
+		//Find and destroy any remaining asteroids that may be on the screen for some reason
 		GameObject[] asteroids = GameObject.FindGameObjectsWithTag ("Asteroid");
-
+	
 		foreach(GameObject g in asteroids)
 		{
 			Destroy (g);
@@ -111,15 +128,18 @@ public class World : MonoBehaviour {
 			return;
 		//Finished waiting
 
+		//Create a number of asteroids based on the player's level
 		for (int i = 0; i < level; i++)
 			createNewAsteroid();
 
+		//Restart the time passed back to zero
 		timePassed1 = 0f;
 		timePassed2 = 0f;
 		timePassed3 = 0f;
 		finishedWait1 = false;
 		finishedWait2 = false;
 
+		//If the 
 		if (GameObject.Find ("Spaceship") == null)
 			Instantiate (Resources.Load ("Spaceship"), new Vector2 (), new Quaternion ());
 		else
@@ -155,7 +175,7 @@ public class World : MonoBehaviour {
 
 	}
 
-	private void createNewAsteroid()
+	private static void createNewAsteroid()
 	{
 		Instantiate (Resources.Load ("lg_Asteroid"),
 			new Vector2 ((Random.Range (0f, 1f) > .5) ? Random.Range (-2.5f, leftBound) : 
@@ -163,9 +183,15 @@ public class World : MonoBehaviour {
 				Random.Range (2f, upperBound) : Random.Range (lowerBound, -2f)), new Quaternion ());
 	}
 
-	private void enableLevelScreen(bool enabled)
+	private static void enableLevelScreen(bool enabled)
 	{
 		GameObject.Find ("LevelDisplay").GetComponent<Text> ().enabled = enabled;
 		GameObject.Find ("LifeCounter").GetComponent<Text> ().enabled = enabled;
+	}
+
+	private static void enableGameOverScreen(bool enabled)
+	{
+		GameObject.Find ("GameOver").GetComponent<Text> ().enabled = enabled;
+		GameObject.Find ("Restart").GetComponent<Text> ().enabled = enabled;
 	}
 }

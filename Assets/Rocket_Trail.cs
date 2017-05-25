@@ -6,7 +6,7 @@ public class Rocket_Trail : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		transform.SetParent (GameObject.Find ("Spaceship").transform);
+		transform.SetParent (GameObject.FindGameObjectWithTag ("Player").transform);
 	}
 	
 	// Update is called once per frame
