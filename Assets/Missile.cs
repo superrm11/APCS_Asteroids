@@ -10,13 +10,13 @@ public class Missile : MonoBehaviour {
 
 	void Start(){
 
-		transform.SetParent(GameObject.Find("Spaceship").transform);
+		transform.SetParent(GameObject.FindGameObjectWithTag("Player").transform);
 		transform.localPosition = new Vector2 (0, 1);
 
 		transform.SetParent (null);
 		gameObject.GetComponent<Collider2D> ().enabled = true;
 
-		transform.rotation = GameObject.Find ("Spaceship").transform.rotation;
+		transform.rotation = GameObject.FindGameObjectWithTag ("Player").transform.rotation;
 
 	}
 	

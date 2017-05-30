@@ -70,6 +70,10 @@ public class World : MonoBehaviour {
 			}
 		}
 
+
+		if (checkForCheatCode ())
+			print ("Cheat Successful!");
+
 	}
 
 	private static float timePassed1 = 0f,timePassed2 = 0f,timePassed3 = 0f;
@@ -140,14 +144,14 @@ public class World : MonoBehaviour {
 		finishedWait2 = false;
 
 		//If the 
-		if (GameObject.Find ("Spaceship") == null)
+		if (GameObject.FindGameObjectWithTag ("Player") == null)
 			Instantiate (Resources.Load ("Spaceship"), new Vector2 (), new Quaternion ());
 		else
 		{
 
-			GameObject.Find ("Spaceship").transform.SetPositionAndRotation (new Vector2 (), new Quaternion ());
+			GameObject.FindGameObjectWithTag ("Player").transform.SetPositionAndRotation (new Vector2 (), new Quaternion ());
 
-			GameObject.Find ("Spaceship").GetComponent<SpriteRenderer> ().enabled = true;
+			GameObject.FindGameObjectWithTag ("Player").GetComponent<SpriteRenderer> ().enabled = true;
 		}
 
 		menuStatus = menuType.GAME;
@@ -194,4 +198,65 @@ public class World : MonoBehaviour {
 		GameObject.Find ("GameOver").GetComponent<Text> ().enabled = enabled;
 		GameObject.Find ("Restart").GetComponent<Text> ().enabled = enabled;
 	}
+
+
+	private const float cheatCodeTime = .5f;
+	private static float currentCheatTime = 0;
+	private enum konamiCode
+	{
+		UP1, UP2, DOWN1, DOWN2, LEFT1, RIGHT1, LEFT2, RIGHT2, B, A, ENTER, DONE
+	}
+
+	private static konamiCode cheatStatus = konamiCode.UP1;
+	private static bool checkForCheatCode()
+	{
+
+		if (currentCheatTime > cheatCodeTime) {
+			cheatStatus = konamiCode.UP1;
+		}
+
+		if (cheatStatus == konamiCode.UP1 && Input.GetKey (KeyCode.UpArrow)) {
+			cheatStatus = konamiCode.UP2;
+			currentCheatTime = 0f;
+		} else if (cheatStatus == konamiCode.UP2 && Input.GetKey (KeyCode.UpArrow)) {
+			cheatStatus = konamiCode.DOWN1;
+			currentCheatTime = 0f;
+		} else if (cheatStatus == konamiCode.DOWN1 && Input.GetKey (KeyCode.DownArrow)) {
+			cheatStatus = konamiCode.DOWN2;
+			currentCheatTime = 0f;
+		} else if (cheatStatus == konamiCode.DOWN2 && Input.GetKey (KeyCode.DownArrow)) {
+			cheatStatus = konamiCode.LEFT1;
+			currentCheatTime = 0f;
+		} else if (cheatStatus == konamiCode.LEFT1 && Input.GetKey (KeyCode.LeftArrow)) {
+			cheatStatus = konamiCode.RIGHT1;
+			currentCheatTime = 0f;
+		} else if (cheatStatus == konamiCode.RIGHT1 && Input.GetKey (KeyCode.RightArrow)) {
+			cheatStatus = konamiCode.LEFT2;
+			currentCheatTime = 0f;
+		} else if (cheatStatus == konamiCode.LEFT2 && Input.GetKey (KeyCode.LeftArrow)) {
+			cheatStatus = konamiCode.RIGHT2;
+			currentCheatTime = 0f;
+		} else if (cheatStatus == konamiCode.RIGHT2 && Input.GetKey (KeyCode.RightArrow)) {
+			cheatStatus = konamiCode.B;
+			currentCheatTime = 0f;
+		} else if (cheatStatus == konamiCode.B && Input.GetKey (KeyCode.B)) {
+			cheatStatus = konamiCode.A;
+			currentCheatTime = 0f;
+		} else if (cheatStatus == konamiCode.A && Input.GetKey (KeyCode.A)) {
+			cheatStatus = konamiCode.ENTER;
+			currentCheatTime = 0f;
+		} else if (cheatStatus == konamiCode.ENTER && Input.GetKey (KeyCode.Return)) {
+			cheatStatus = konamiCode.DONE;
+			currentCheatTime = 0f;
+		} else if (cheatStatus == konamiCode.DONE) {
+			cheatStatus = konamiCode.UP1;
+			return true;
+		}
+
+		currentCheatTime += Time.deltaTime;
+
+		return false;
+	}
+
+
 }
