@@ -46,6 +46,7 @@ public class Spaceship : MonoBehaviour {
 		}else if (Input.GetKey (KeyCode.Space)) {
 			Instantiate (Resources.Load("Missile"));
 			currentTime = missileFireRate;
+			GetComponent<AudioSource> ().Play ();
 		}
 	}
 

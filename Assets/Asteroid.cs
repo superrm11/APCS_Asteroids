@@ -32,8 +32,9 @@ public class Asteroid : MonoBehaviour {
 		for (int i = 0; i < 2; i++) {
 			string levelName = (level == 3) ? "med_Asteroid" : "sm_Asteroid";
 			Asteroid a = ((GameObject) Instantiate (Resources.Load (levelName), transform.position, new Quaternion ())).GetComponent<Asteroid>();
-			a.level = level - 1;
 		}
+		
+		GameObject.Find("Background").gameObject.GetComponents<AudioSource> () [level - 1].Play ();
 		Destroy (gameObject);
 	}
 

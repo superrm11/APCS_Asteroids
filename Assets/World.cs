@@ -34,6 +34,7 @@ public class World : MonoBehaviour {
 	void Update()
 	{
 		if (menuStatus == menuType.MENU) {
+			GameObject.FindGameObjectWithTag ("RocketTrail").GetComponent<Rocket_Trail> ().enable = false;
 			GameObject.Find ("MenuName").GetComponent<Text> ().enabled = true;
 			GameObject.Find ("PressSpace").GetComponent<Text> ().enabled = true;
 			if (Input.GetKey (KeyCode.Space)) {
@@ -41,6 +42,7 @@ public class World : MonoBehaviour {
 			}
 
 		} else if (menuStatus == menuType.LEVELUP_SCREEN) {
+			GameObject.FindGameObjectWithTag ("RocketTrail").GetComponent<Rocket_Trail> ().enable = false;
 			if (GameObject.Find ("MenuName").GetComponent<Text> ().enabled == true ||
 			    GameObject.Find ("PressSpace").GetComponent<Text> ().enabled == true) {
 				GameObject.Find ("PressSpace").GetComponent<Text> ().enabled = false;
@@ -48,9 +50,11 @@ public class World : MonoBehaviour {
 			} 
 			displayLevelScreen (levelScreenType.LEVELUP);
 		} else if (menuStatus == menuType.LIFEDOWN_SCREEN) {
+			GameObject.FindGameObjectWithTag ("RocketTrail").GetComponent<Rocket_Trail> ().enable = false;
 			displayLevelScreen (levelScreenType.LIFEDOWN);
 
 		} else if (menuStatus == menuType.GAME) {
+			GameObject.FindGameObjectWithTag ("RocketTrail").GetComponent<Rocket_Trail> ().enable = true;
 			if (lives < 1) {
 				menuStatus = menuType.GAME_OVER;
 			} else if (GameObject.FindGameObjectsWithTag ("Asteroid").Length == 0) {
@@ -61,6 +65,7 @@ public class World : MonoBehaviour {
 			}
 			
 		} else if (menuStatus == menuType.GAME_OVER) {
+			GameObject.FindGameObjectWithTag ("RocketTrail").GetComponent<Rocket_Trail> ().enable = false;
 			enableGameOverScreen (true);
 			if (Input.GetKey (KeyCode.R)) {
 				enableGameOverScreen (false);
@@ -200,7 +205,7 @@ public class World : MonoBehaviour {
 	}
 
 
-	private const float cheatCodeTime = .5f;
+	private const float cheatCodeTime = 1f;
 	private static float currentCheatTime = 0;
 	private enum konamiCode
 	{
@@ -213,6 +218,7 @@ public class World : MonoBehaviour {
 
 		if (currentCheatTime > cheatCodeTime) {
 			cheatStatus = konamiCode.UP1;
+			currentCheatTime = 0f;
 		}
 
 		if (cheatStatus == konamiCode.UP1 && Input.GetKey (KeyCode.UpArrow)) {
@@ -256,6 +262,24 @@ public class World : MonoBehaviour {
 		currentCheatTime += Time.deltaTime;
 
 		return false;
+	}
+
+	private static bool isRunningCheat = false;
+
+	private static float ellapsedTime1 = 0f;
+	private static bool finishedStage1 = false;
+
+	private static void runCheatSequence(bool enable)
+	{
+		if (enable) {
+			isRunningCheat = true;
+		}
+
+		if (!isRunningCheat)
+			return;
+
+
+
 	}
 
 
