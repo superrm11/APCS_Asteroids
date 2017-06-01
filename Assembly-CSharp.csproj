@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Asteroid.cs" />
+     <Compile Include="Assets\KonamiCheat.cs" />
      <Compile Include="Assets\Missile.cs" />
      <Compile Include="Assets\Rocket_Trail.cs" />
      <Compile Include="Assets\Spaceship.cs" />

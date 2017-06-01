@@ -85,8 +85,12 @@ public class Spaceship : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D c)
 	{
-		if (c.gameObject.tag.Equals ("Asteroid"))
+		if (c.gameObject.tag.Equals ("Asteroid")) {
+			
 			Destroy (gameObject);
+			for (int i = 0; i < 3; i++)
+				GameObject.Find ("Background").GetComponents<AudioSource> () [i].Play ();
+		}
 	}
 
 

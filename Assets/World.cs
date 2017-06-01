@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,13 +28,11 @@ public class World : MonoBehaviour {
 		levelScreen.enabled = true;
 		GameObject.Find ("LevelDisplay").GetComponent<Text> ().enabled = false;
 		GameObject.Find ("LifeCounter").GetComponent<Text> ().enabled = false;
-
 	}
 		
 	void Update()
 	{
 		if (menuStatus == menuType.MENU) {
-			GameObject.FindGameObjectWithTag ("RocketTrail").GetComponent<Rocket_Trail> ().enable = false;
 			GameObject.Find ("MenuName").GetComponent<Text> ().enabled = true;
 			GameObject.Find ("PressSpace").GetComponent<Text> ().enabled = true;
 			if (Input.GetKey (KeyCode.Space)) {
@@ -42,7 +40,6 @@ public class World : MonoBehaviour {
 			}
 
 		} else if (menuStatus == menuType.LEVELUP_SCREEN) {
-			GameObject.FindGameObjectWithTag ("RocketTrail").GetComponent<Rocket_Trail> ().enable = false;
 			if (GameObject.Find ("MenuName").GetComponent<Text> ().enabled == true ||
 			    GameObject.Find ("PressSpace").GetComponent<Text> ().enabled == true) {
 				GameObject.Find ("PressSpace").GetComponent<Text> ().enabled = false;
@@ -50,22 +47,24 @@ public class World : MonoBehaviour {
 			} 
 			displayLevelScreen (levelScreenType.LEVELUP);
 		} else if (menuStatus == menuType.LIFEDOWN_SCREEN) {
-			GameObject.FindGameObjectWithTag ("RocketTrail").GetComponent<Rocket_Trail> ().enable = false;
 			displayLevelScreen (levelScreenType.LIFEDOWN);
 
 		} else if (menuStatus == menuType.GAME) {
-			GameObject.FindGameObjectWithTag ("RocketTrail").GetComponent<Rocket_Trail> ().enable = true;
 			if (lives < 1) {
 				menuStatus = menuType.GAME_OVER;
+				return;
 			} else if (GameObject.FindGameObjectsWithTag ("Asteroid").Length == 0) {
+				Destroy (GameObject.FindGameObjectWithTag ("Player"));
 				menuStatus = menuType.LEVELUP_SCREEN;
 				displayLevelScreen (levelScreenType.LEVELUP);
+				return;
 			} else if (GameObject.FindGameObjectWithTag ("Player") == null) {
+				Destroy (GameObject.FindGameObjectWithTag ("Player"));
 				menuStatus = menuType.LIFEDOWN_SCREEN;
+				return;
 			}
 			
 		} else if (menuStatus == menuType.GAME_OVER) {
-			GameObject.FindGameObjectWithTag ("RocketTrail").GetComponent<Rocket_Trail> ().enable = false;
 			enableGameOverScreen (true);
 			if (Input.GetKey (KeyCode.R)) {
 				enableGameOverScreen (false);
@@ -75,9 +74,6 @@ public class World : MonoBehaviour {
 			}
 		}
 
-
-		if (checkForCheatCode ())
-			print ("Cheat Successful!");
 
 	}
 
@@ -148,16 +144,9 @@ public class World : MonoBehaviour {
 		finishedWait1 = false;
 		finishedWait2 = false;
 
-		//If the 
-		if (GameObject.FindGameObjectWithTag ("Player") == null)
-			Instantiate (Resources.Load ("Spaceship"), new Vector2 (), new Quaternion ());
-		else
-		{
 
-			GameObject.FindGameObjectWithTag ("Player").transform.SetPositionAndRotation (new Vector2 (), new Quaternion ());
+		Instantiate (Resources.Load ("Spaceship"), new Vector2 (), new Quaternion ());
 
-			GameObject.FindGameObjectWithTag ("Player").GetComponent<SpriteRenderer> ().enabled = true;
-		}
 
 		menuStatus = menuType.GAME;
 
@@ -204,83 +193,6 @@ public class World : MonoBehaviour {
 		GameObject.Find ("Restart").GetComponent<Text> ().enabled = enabled;
 	}
 
-
-	private const float cheatCodeTime = 1f;
-	private static float currentCheatTime = 0;
-	private enum konamiCode
-	{
-		UP1, UP2, DOWN1, DOWN2, LEFT1, RIGHT1, LEFT2, RIGHT2, B, A, ENTER, DONE
-	}
-
-	private static konamiCode cheatStatus = konamiCode.UP1;
-	private static bool checkForCheatCode()
-	{
-
-		if (currentCheatTime > cheatCodeTime) {
-			cheatStatus = konamiCode.UP1;
-			currentCheatTime = 0f;
-		}
-
-		if (cheatStatus == konamiCode.UP1 && Input.GetKey (KeyCode.UpArrow)) {
-			cheatStatus = konamiCode.UP2;
-			currentCheatTime = 0f;
-		} else if (cheatStatus == konamiCode.UP2 && Input.GetKey (KeyCode.UpArrow)) {
-			cheatStatus = konamiCode.DOWN1;
-			currentCheatTime = 0f;
-		} else if (cheatStatus == konamiCode.DOWN1 && Input.GetKey (KeyCode.DownArrow)) {
-			cheatStatus = konamiCode.DOWN2;
-			currentCheatTime = 0f;
-		} else if (cheatStatus == konamiCode.DOWN2 && Input.GetKey (KeyCode.DownArrow)) {
-			cheatStatus = konamiCode.LEFT1;
-			currentCheatTime = 0f;
-		} else if (cheatStatus == konamiCode.LEFT1 && Input.GetKey (KeyCode.LeftArrow)) {
-			cheatStatus = konamiCode.RIGHT1;
-			currentCheatTime = 0f;
-		} else if (cheatStatus == konamiCode.RIGHT1 && Input.GetKey (KeyCode.RightArrow)) {
-			cheatStatus = konamiCode.LEFT2;
-			currentCheatTime = 0f;
-		} else if (cheatStatus == konamiCode.LEFT2 && Input.GetKey (KeyCode.LeftArrow)) {
-			cheatStatus = konamiCode.RIGHT2;
-			currentCheatTime = 0f;
-		} else if (cheatStatus == konamiCode.RIGHT2 && Input.GetKey (KeyCode.RightArrow)) {
-			cheatStatus = konamiCode.B;
-			currentCheatTime = 0f;
-		} else if (cheatStatus == konamiCode.B && Input.GetKey (KeyCode.B)) {
-			cheatStatus = konamiCode.A;
-			currentCheatTime = 0f;
-		} else if (cheatStatus == konamiCode.A && Input.GetKey (KeyCode.A)) {
-			cheatStatus = konamiCode.ENTER;
-			currentCheatTime = 0f;
-		} else if (cheatStatus == konamiCode.ENTER && Input.GetKey (KeyCode.Return)) {
-			cheatStatus = konamiCode.DONE;
-			currentCheatTime = 0f;
-		} else if (cheatStatus == konamiCode.DONE) {
-			cheatStatus = konamiCode.UP1;
-			return true;
-		}
-
-		currentCheatTime += Time.deltaTime;
-
-		return false;
-	}
-
-	private static bool isRunningCheat = false;
-
-	private static float ellapsedTime1 = 0f;
-	private static bool finishedStage1 = false;
-
-	private static void runCheatSequence(bool enable)
-	{
-		if (enable) {
-			isRunningCheat = true;
-		}
-
-		if (!isRunningCheat)
-			return;
-
-
-
-	}
 
 
 }
