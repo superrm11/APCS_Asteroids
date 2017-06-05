@@ -65,19 +65,28 @@ public class Spaceship : MonoBehaviour {
 	 */
 	private void move()
 	{
-		if (Input.GetKey (KeyCode.UpArrow) && moveSpeed < maxMoveSpeed) {
-			moveSpeed += accelSpeed;
-		} else if (moveSpeed > 0.0)
-			moveSpeed -= decelSpeed;
 
-		if (moveSpeed < 0.0)
-			moveSpeed = 0;
 
-		if(Input.GetKey(KeyCode.LeftArrow))
-			transform.Rotate(Vector3.forward, turnSpeed * Time.deltaTime);
 
-		if(Input.GetKey(KeyCode.RightArrow))
-			transform.Rotate(Vector3.forward, -turnSpeed * Time.deltaTime);
+		if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor) {
+			if (Input.GetKey (KeyCode.UpArrow) && moveSpeed < maxMoveSpeed) {
+				moveSpeed += accelSpeed;
+			} else if (moveSpeed > 0.0)
+				moveSpeed -= decelSpeed;
+
+			if (moveSpeed < 0.0)
+				moveSpeed = 0;
+
+			if (Input.GetKey (KeyCode.LeftArrow))
+				transform.Rotate (Vector3.forward, turnSpeed * Time.deltaTime);
+
+			if (Input.GetKey (KeyCode.RightArrow))
+				transform.Rotate (Vector3.forward, -turnSpeed * Time.deltaTime);
+		} else if (Application.platform == RuntimePlatform.Android) {
+			for (int i = 0; i < Input.touchCount; i++) {
+				//TODO working on Android support
+			}
+		}
 
 		transform.Translate(Vector2.up * Time.deltaTime * moveSpeed);
 	}

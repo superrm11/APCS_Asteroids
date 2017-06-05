@@ -28,6 +28,10 @@ public class World : MonoBehaviour {
 		levelScreen.enabled = true;
 		GameObject.Find ("LevelDisplay").GetComponent<Text> ().enabled = false;
 		GameObject.Find ("LifeCounter").GetComponent<Text> ().enabled = false;
+
+		if (Application.platform == RuntimePlatform.Android) {
+			GameObject.Find ("Controls").GetComponent<Canvas> ().enabled = true;
+		}
 	}
 		
 	void Update()
@@ -72,6 +76,10 @@ public class World : MonoBehaviour {
 				level = 0;
 				menuStatus = menuType.LEVELUP_SCREEN;
 			}
+		}
+
+		if (Input.GetKey (KeyCode.Escape)) {
+			Application.Quit ();
 		}
 
 
