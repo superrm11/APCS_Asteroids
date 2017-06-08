@@ -51,6 +51,7 @@
      <Compile Include="Assets\Missile.cs" />
      <Compile Include="Assets\Rocket_Trail.cs" />
      <Compile Include="Assets\Spaceship.cs" />
+     <Compile Include="Assets\TouchButton.cs" />
      <Compile Include="Assets\World.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
