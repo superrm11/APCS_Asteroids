@@ -7,8 +7,8 @@ public class TouchButton : MonoBehaviour {
 	public float width = 1f;
 	public float height = 1f;
 
-	Color grayed = new Color(50,50,50,128);
-	Color white = new Color(0,0,0,128);
+	Color grayed = new Color(50f,50f,50f,255f);
+	Color white = new Color(0f,0f,0f,255f);
 
 	public void Update()
 	{

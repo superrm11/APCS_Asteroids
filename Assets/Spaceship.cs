@@ -21,7 +21,7 @@ public class Spaceship : MonoBehaviour {
 		if (World.menuStatus == World.menuType.GAME) {
 			if (GetComponent<SpriteRenderer> ().enabled == false)
 				GetComponent<SpriteRenderer> ().enabled = true;
-
+			
 			move ();
 
 			World.checkBounderies (this.gameObject, 0f);
